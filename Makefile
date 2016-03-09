@@ -1,4 +1,5 @@
 #------------------------------------------------------------------------------
+export ANALYZER = /work/halla/gmp12/longwu/software/analyzer/1.6
 
 # Compile extra debugging code (slight performance impact)
 export WITH_DEBUG = 1
@@ -329,7 +330,7 @@ ifneq ($(ANALYZER),$(shell pwd))
 		@echo "Installing in $(ANALYZER) ..."
 		@mkdir -p $(ANALYZER)/{$(PLATFORM),include,src/src,docs,DB,examples,SDK}
 		cp -pu $(SRC) $(HDR) $(HA_LINKDEF) $(ANALYZER)/src/src
-		cp -pu $(HDR) $(ANALYZER)/include
+		cp -pu $(HDR) $(DCDIR)/Decoder.h $(ANALYZER)/include
 		tar cf - $(shell find examples docs SDK -type f | grep -v '*~') | \
 			tar xf - -C $(ANALYZER)
 		cp -pu Makefile ChangeLog $(ANALYZER)/src
