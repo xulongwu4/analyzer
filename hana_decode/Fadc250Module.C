@@ -216,8 +216,9 @@ namespace Decoder {
     fWordsSeen = 0;
     Int_t numwords = 0;
     if (IsSlot(*evbuffer)) {
-      if (IsIntegMode()) numwords = *(evbuffer+2);
-      if (IsSampleMode()) numwords = 10000;  // Where is it ?
+      //if (IsIntegMode()) numwords = *(evbuffer+2);
+      //if (IsSampleMode()) numwords = 10000;  // Where is it ?
+      numwords = 10000;  // Where is it ?
     }
 // This would not happen if CRL puts numwords into output
     if (numwords < 0) cout << "Fadc250: warning: negative num words ?"<<endl;
