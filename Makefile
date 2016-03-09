@@ -1,4 +1,5 @@
 #------------------------------------------------------------------------------
+export ANALYZER = /work/halla/gmp12/longwu/gmp_analysis/gmp_tools/install/1.6-fpp
 
 # Compile extra debugging code (slight performance impact)
 export WITH_DEBUG = 1
@@ -51,6 +52,9 @@ LIBS         :=
 GLIBS        :=
 
 INCLUDES     := $(addprefix -I, $(INCDIRS) )
+FPPDIR       := /work/halla/gmp12/longwu/gmp_analysis/gmp_tools/libraries-1.6/GmpFppnew
+INCLUDES     += -I$(FPPDIR)
+LIBS         += -L$(FPPDIR) -lGmpFpp
 
 # If EVIO environment not defined, define it to point here and build locally
 ifndef EVIO_LIBDIR
@@ -295,7 +299,7 @@ $(HA_DICT).C: $(RCHDR) $(HA_LINKDEF)
 
 #---------- Main program -------------------------------------------
 analyzer:	src/main.o $(PODDLIBS)
-		$(LD) $(LDFLAGS) $< $(HALLALIBS) $(GLIBS) -o $@
+		$(LD) $(LDFLAGS) $< $(HALLALIBS) $(LIBS) $(GLIBS) -o $@
 
 #---------- Maintenance --------------------------------------------
 clean:
@@ -329,7 +333,7 @@ ifneq ($(ANALYZER),$(shell pwd))
 		@echo "Installing in $(ANALYZER) ..."
 		@mkdir -p $(ANALYZER)/{$(PLATFORM),include,src/src,docs,DB,examples,SDK}
 		cp -pu $(SRC) $(HDR) $(HA_LINKDEF) $(ANALYZER)/src/src
-		cp -pu $(HDR) $(ANALYZER)/include
+		cp -pu $(HDR) $(DCDIR)/Decoder.h $(ANALYZER)/include
 		tar cf - $(shell find examples docs SDK -type f | grep -v '*~') | \
 			tar xf - -C $(ANALYZER)
 		cp -pu Makefile ChangeLog $(ANALYZER)/src
