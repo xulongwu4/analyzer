@@ -1,5 +1,6 @@
 #------------------------------------------------------------------------------
 export ANALYZER = /work/halla/gmp12/longwu/software/analyzer/1.6
+export PLATFORM = lib
 
 # Compile extra debugging code (slight performance impact)
 export WITH_DEBUG = 1
@@ -333,7 +334,8 @@ ifneq ($(ANALYZER),$(shell pwd))
 		cp -pu $(HDR) $(DCDIR)/Decoder.h $(ANALYZER)/include
 		tar cf - $(shell find examples docs SDK -type f | grep -v '*~') | \
 			tar xf - -C $(ANALYZER)
-		cp -pu Makefile ChangeLog $(ANALYZER)/src
+#		cp -pu Makefile ChangeLog $(ANALYZER)/src
+		cp -pu Makefile $(ANALYZER)/src
 		cp -pru DB $(ANALYZER)/
 		@echo "Installing in $(ANALYZER)/$(PLATFORM) ..."
 		for lib in $(filter-out $(LIBEVIO), $(PODDLIBS)); do \
