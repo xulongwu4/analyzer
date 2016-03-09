@@ -10,6 +10,8 @@
 
 #include "THaVDCPointPair.h"
 #include "THaVDCChamber.h"
+#include "THaApparatus.h"
+#include "GmpStrawChamber.h"
 #include "TClass.h"       // for IsA()
 #include "TString.h"
 
