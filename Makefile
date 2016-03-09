@@ -363,7 +363,8 @@ endif
 		cp -pu $(LNA_SRC) $(LNA_HDR) $(LNA_LINKDEF) $(ANALYZER)/src/src
 		cp -pu $(HDR) $(LNA_HDR) $(ANALYZER)/include
 		tar cf - `find examples docs SDK -type f | grep -Ev '(CVS|*~)'` | tar xf - -C $(ANALYZER)
-		cp -pu Makefile ChangeLog $(ANALYZER)/src
+#		cp -pu Makefile ChangeLog $(ANALYZER)/src
+		cp -pu Makefile $(ANALYZER)/src
 		cp -pru DB $(ANALYZER)/
 		@echo "Installing in $(ANALYZER)/$(PLATFORM) ..."
 		for lib in $(PODDLIBS); do \
