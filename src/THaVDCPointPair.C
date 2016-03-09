@@ -20,14 +20,29 @@ using namespace std;
 using namespace VDC;
 
 //_____________________________________________________________________________
+//void THaVDCPointPair::Analyze()
+//{
+//  // Compute goodness of match parameter between upper and lower point.
+//  // Essentially, this is a measure of how closely the two local tracks
+//  // point at each other.
+//
+//  //FIXME: preliminary, just the old functionality
+//  fError = CalcError( fLowerPoint, fUpperPoint, fSpacing );
+//}
+
+//_____________________________________________________________________________
 void THaVDCPointPair::Analyze()
 {
   // Compute goodness of match parameter between upper and lower point.
   // Essentially, this is a measure of how closely the two local tracks
   // point at each other.
 
-  //FIXME: preliminary, just the old functionality
-  fError = CalcError( fLowerPoint, fUpperPoint, fSpacing );
+  GmpStrawChamber* fpp = static_cast<GmpStrawChamber*>( fLowerPoint->GetChamber()->GetApparatus()->GetDetector("gmpfpp") );
+  if (fpp) {
+      fError = fpp->Analyze(this);
+  }
+
+  if ( !fpp || fError<0 ) fError = CalcError( fLowerPoint, fUpperPoint, fSpacing );
 }
 
 //_____________________________________________________________________________
