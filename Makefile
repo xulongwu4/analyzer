@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-export ANALYZER = /work/halla/gmp12/longwu/gmp_analysis/gmp_tools/install/1.6-fpp
+export ANALYZER = /work/halla/gmp12/longwu/software/analyzer/1.6-fpp
 
 # Compile extra debugging code (slight performance impact)
 export WITH_DEBUG = 1
