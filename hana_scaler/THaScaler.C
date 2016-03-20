@@ -668,7 +668,7 @@ struct request {
 
   int   sFd;      //  socket file descriptor 
   int i, k, slot, nchan, ntot, sca;
-  unsigned long nRead, nRead1;
+  ssize_t nRead, nRead1;
   struct request myRequest;           //  request to send to server 
   struct request vmeReply;            //  reply from server
   struct sockaddr_in serverSockAddr;  //  socket addr of server
@@ -709,7 +709,7 @@ struct request {
        printf("ERROR: THaScaler: reading from scaler server\n");
        exit(0);
     }
-    while (nRead < sizeof(vmeReply)) {
+    while (nRead < static_cast<ssize_t>(sizeof(vmeReply))) {
        nRead1 = read (sFd, ((char *) &vmeReply)+nRead,
                     sizeof(vmeReply)-nRead);
        if (timeoutcnt++ > 50) break;

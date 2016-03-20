@@ -130,6 +130,9 @@ else
 endif
 
 MAKEDEPEND    = g++
+ifeq ($(shell root-config --version | cut -c1),6)
+  MAKEDEPEND += -std=c++11
+endif
 
 export OSNAME := $(shell uname)
 
@@ -321,6 +324,9 @@ swapped_intcpy.o: swapped_intcpy.c
 THaDecDict.C: $(RCHEAD) haDecode_LinkDef.h
 	@echo "Generating Decoder Dictionary..."
 	$(ROOTBIN)/rootcint -f THaDecDict.C -c $(ROOTINC) $(INCLUDES) $(DEFINES) $^
+ifndef STANDALONE
+	if [ -r THaDecDict_rdict.pcm ]; then cp -p THaDecDict_rdict.pcm $(LIBDIR); fi
+endif
 
 # create a tar file of ./$(VERS)/* (all code)
 

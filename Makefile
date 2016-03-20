@@ -148,6 +148,9 @@ endif
 
 
 MAKEDEPEND   := gcc
+ifeq ($(shell root-config --version | cut -c1),6)
+  MAKEDEPEND += -std=c++11
+endif
 
 ifdef WITH_DEBUG
 DEFINES      += -DWITH_DEBUG
@@ -334,8 +337,8 @@ analyzer:	src/main.o $(LIBDC) $(LIBSCALER) $(LIBHALLA)
 #---------- Maintenance --------------------------------------------
 clean:
 		set -e; for i in $(SUBDIRS); do $(MAKE) -C $$i clean; done
-		rm -f *.{so,a,o,os} *.so.*
-		rm -f $(PROGRAMS) $(HA_DICT).* $(LNA_DICT).* *~
+		rm -f *.{so,a,o,os} *.so.* *~
+		rm -f $(PROGRAMS) $(HA_DICT).* $(LNA_DICT).* *_rdict.pcm
 		cd src; rm -f ha_compiledata.h *.{o,os} *~
 
 realclean:	clean
@@ -345,13 +348,13 @@ realclean:	clean
 srcdist:
 		rm -f ../$(NAME)
 		ln -s $(PWD) ../$(NAME)
-		tar czv -C .. -f ../$(NAME).tar.gz -X .exclude \
-		 -V "JLab/Hall A C++ Analysis Software "$(VERSION)" `date -I`"\
+		tar -czvf ../$(NAME).tar.gz -X .exclude -C .. \
 		 $(NAME)/.exclude $(NAME)/ChangeLog \
 		 $(NAME)/src $(NAME)/$(DCDIR) $(NAME)/$(SCALERDIR) \
 		 $(NAME)/Makefile \
 		 $(NAME)/DB $(NAME)/examples $(NAME)/SDK \
-		 $(NAME)/docs $(NAME)/Calib $(NAME)/contrib
+		 $(NAME)/docs $(NAME)/Calib $(NAME)/contrib $(NAME)/scons \
+		 $(NAME)/SConstruct $(NAME)/*.py
 
 install:	all
 ifndef ANALYZER

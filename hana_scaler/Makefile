@@ -119,6 +119,9 @@ ARCH          = linux
 endif
 
 MAKEDEPEND    = g++
+ifeq ($(shell root-config --version | cut -c1),6)
+  MAKEDEPEND += -std=c++11
+endif
 
 export OSNAME := $(shell uname)
 
@@ -274,6 +277,9 @@ tscalring23: tscalring23_main.o $(SCALER_OBJS) $(SRC) $(HEAD) $(LIBDC)
 THaScalDict.C: $(HEAD) haScal_LinkDef.h
 	@echo "Generating Scaler Package Dictionary..."
 	$(ROOTBIN)/rootcint -f THaScalDict.C -c $(ROOTINC) $(INCLUDES) $(DEFINES) $^
+ifndef STANDALONE
+	if [ -r THaScalDict_rdict.pcm ]; then cp -p THaScalDict_rdict.pcm $(LIBDIR); fi
+endif
 
 tarfile: clean version
 	tar cvf $(VERS).tar ./hana_scaler
