@@ -88,13 +88,13 @@ SONAME       := -Wl,-soname=
 CXXVER       := $(shell g++ --version | head -1 | sed 's/.* \([0-9]\)\..*/\1/')
 DEFINES      += $(shell getconf LFS_CFLAGS)
 ifeq ($(CXXVER),4)
-CXXFLAGS     += -Wextra -Wno-missing-field-initializers
+CXXEXTFLG    += -Wextra -Wno-missing-field-initializers -Wno-unused-parameter
 DICTCXXFLG   := -Wno-strict-aliasing
 endif
 endif
 
 ifeq ($(ARCH),macosx)
-# EXPERIMENTAL: Mac OS X with Xcode/gcc 3.x
+# Mac OS X with gcc >= 3.x or clang++ >= 5
 ifdef DEBUG
   CXXFLG     := -g -O0
   LDFLAGS    := -g -O0
@@ -111,11 +111,15 @@ LD           := g++
 LDCONFIG     :=
 SOFLAGS      := -shared -Wl,-undefined,dynamic_lookup
 SONAME       := -Wl,-install_name,@rpath/
+ifeq ($(CXX),clang++)
+CXXEXTFLG    += -Wextra -Wno-missing-field-initializers -Wno-unused-parameter
+else
 #FIXME: should be configure'd:
 CXXVER       := $(shell g++ --version | head -1 | sed 's/.* \([0-9]\)\..*/\1/')
 ifeq ($(CXXVER),4)
-CXXFLAGS     += -Wextra -Wno-missing-field-initializers
+CXXEXTFLG    += -Wextra -Wno-missing-field-initializers
 DICTCXXFLG   := -Wno-strict-aliasing
+endif
 endif
 endif
 
@@ -313,15 +317,11 @@ realclean:	clean
 srcdist:
 		rm -f ../$(NAME)
 		ln -s $(PWD) ../$(NAME)
-		tar czv -C .. -f ../$(NAME).tar.gz -X .exclude \
-		 -V "JLab/Hall A C++ Analysis Software "$(VERSION)$(EXTVERS)" `date -I`"\
+		tar -czv -f ../$(NAME).tar.gz -X .exclude -C .. \
 		 $(addprefix $(NAME)/, \
 		  ChangeLog $(wildcard README*) Makefile .exclude .gitignore \
 		  SConstruct $(wildcard *.py) scons \
-		  src $(DCDIR))
-
-# $(NAME)/DB $(NAME)/examples \# $(NAME)/docs $(NAME)/Calib
-# $(NAME)/contrib
+		  src $(DCDIR) Calib DB examples contrib docs SDK)
 
 install:	all
 ifndef ANALYZER
