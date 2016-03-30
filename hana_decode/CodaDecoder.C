@@ -17,8 +17,8 @@ using namespace std;
 
 namespace Decoder {
 
-  static const Int_t MAX_EVTYPES = 200;
-  static const Int_t MAX_PHYS_EVTYPES = 14;
+//   static const Int_t MAX_EVTYPES = 200;
+//   static const Int_t MAX_PHYS_EVTYPES = 14;
 
 //_____________________________________________________________________________
 CodaDecoder::CodaDecoder()
@@ -111,7 +111,7 @@ Int_t CodaDecoder::LoadEvent(const UInt_t* evbuffer)
      event_num = evbuffer[4];
      recent_event = event_num;
      FindRocs(evbuffer);
-     if ((fdfirst==1) & (fDebugFile>0)) {
+     if ((fdfirst==1) & (fDebugFile!=0)) {
        fdfirst=0;
        CompareRocs();
      }

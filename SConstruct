@@ -123,6 +123,36 @@ baseenv.Append(CPPPATH = ['$EVIO_INC'])
 #
 baseenv.Append(CPPPATH = ['$HA_SRC','$HA_DC'])
 
+####### ROOT Definitions ####################
+baseenv.Append(ROOTCONFIG = 'root-config')
+baseenv.Append(ROOTCINT = 'rootcint')
+
+try:
+	baseenv.ParseConfig('$ROOTCONFIG --cflags')
+	baseenv.ParseConfig('$ROOTCONFIG --libs')
+        if sys.version_info >= (2, 7):
+                cmd = baseenv['ROOTCONFIG'] + " --cxx"
+                baseenv.Replace(CXX = subprocess.check_output(cmd, shell=True).rstrip())
+        else:
+                baseenv.Replace(CXX = subprocess.Popen([baseenv['ROOTCONFIG'], '--cxx'], stdout=subprocess.PIPE).communicate()[0].rstrip())
+except OSError:
+	try:
+		baseenv.Replace(ROOTCONFIG = baseenv['ENV']['ROOTSYS'] + '/bin/root-config')
+		baseenv.Replace(ROOTCINT = baseenv['ENV']['ROOTSYS'] + '/bin/rootcint')
+		baseenv.ParseConfig('$ROOTCONFIG --cflags')
+		baseenv.ParseConfig('$ROOTCONFIG --libs')
+                if sys.version_info >= (2, 7):
+                      cmd = baseenv['ROOTCONFIG'] + " --cxx"
+                      baseenv.Replace(CXX = subprocess.check_output(cmd, shell=True).rstrip())
+                else:
+                      baseenv.Replace(CXX = subprocess.Popen([baseenv['ROOTCONFIG'], '--cxx'], stdout=subprocess.PIPE).communicate()[0].rstrip())
+	except KeyError:
+       		print('!!! Cannot find ROOT.  Check if root-config is in your PATH.')
+		Exit(1)
+
+bld = Builder(action=rootcint)
+baseenv.Append(BUILDERS = {'RootCint': bld})
+
 ######## Configure Section #######
 
 import configure
@@ -138,32 +168,10 @@ if not conf.CheckCXX():
 
 #if not conf.CheckFunc('printf'):
 if not conf.CheckCC():
-       	print('!!! Your compiler and/or environment is not correctly configured.')
-       	Exit(0)
+        print('!!! Your compiler and/or environment is not correctly configured.')
+        Exit(0)
 
 baseenv = conf.Finish()
-
-####### ROOT Definitions ####################
-baseenv.Append(ROOTCONFIG = 'root-config')
-baseenv.Append(ROOTCINT = 'rootcint')
-
-try:
-	baseenv.ParseConfig('$ROOTCONFIG --cflags')
-	baseenv.ParseConfig('$ROOTCONFIG --libs')
-	baseenv.MergeFlags('-fPIC')
-except OSError:
-	try:
-		baseenv.Replace(ROOTCONFIG = baseenv['ENV']['ROOTSYS'] + '/bin/root-config')
-		baseenv.Replace(ROOTCINT = baseenv['ENV']['ROOTSYS'] + '/bin/rootcint')
-		baseenv.ParseConfig('$ROOTCONFIG --cflags')
-		baseenv.ParseConfig('$ROOTCONFIG --libs')
-		baseenv.MergeFlags('-fPIC')
-	except KeyError:
-       		print('!!! Cannot find ROOT.  Check if root-config is in your PATH.')
-		Exit(1)
-
-bld = Builder(action=rootcint)
-baseenv.Append(BUILDERS = {'RootCint': bld})
 
 ######## cppcheck ###########################
 
@@ -218,7 +226,7 @@ dclib = 'dc'
 eviolib = 'evio'
 
 baseenv.Append(LIBPATH=['$HA_DIR','$EVIO_LIB','$HA_SRC','$HA_DC'])
-baseenv.Append(LIBS=[eviolib,hallalib,dclib])
+baseenv.Prepend(LIBS=[hallalib,dclib,eviolib])
 baseenv.Replace(SHLIBSUFFIX = '.so')
 baseenv.Append(SHLIBSUFFIX = '.'+baseenv.subst('$VERSION'))
 
