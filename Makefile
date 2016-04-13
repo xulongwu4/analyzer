@@ -6,7 +6,7 @@ export PLATFORM = lib
 export WITH_DEBUG = 1
 
 # Compile debug version
-export DEBUG = 1
+#export DEBUG = 1
 
 # Include libraries for reading from the ET ring
 #  (only for adaq? machines with the Coda libraries )
@@ -18,7 +18,7 @@ export DEBUG = 1
 SOVERSION  := 1.6
 PATCH   := 0
 VERSION := $(SOVERSION).$(PATCH)
-EXTVERS := -alpha4
+EXTVERS := -beta1
 #EXTVERS := -et
 NAME    := analyzer-$(VERSION)
 VERCODE := $(shell echo $(subst ., ,$(SOVERSION)) $(PATCH) | \
@@ -324,7 +324,8 @@ srcdist:
 		 $(addprefix $(NAME)/, \
 		  ChangeLog $(wildcard README*) Makefile .exclude .gitignore \
 		  SConstruct $(wildcard *.py) scons \
-		  src $(DCDIR) Calib DB examples contrib docs SDK)
+		  src $(DCDIR) Calib DB examples contrib docs SDK \
+		  evio/Makefile evio/Makefile.libsrc)
 
 install:	all
 ifndef ANALYZER
