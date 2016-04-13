@@ -15,7 +15,7 @@ export WITH_DEBUG = 1
 # SOVERSION should be numerical only - it becomes the shared lib soversion
 # EXTVERS (optional) describes the build, e.g. "dbg", "et", "gcc33" etc.
 SOVERSION  := 1.5
-PATCH   := 30
+PATCH   := 31
 VERSION := $(SOVERSION).$(PATCH)
 EXTVERS :=
 #EXTVERS := -et
@@ -354,7 +354,7 @@ srcdist:
 		 $(NAME)/Makefile \
 		 $(NAME)/DB $(NAME)/examples $(NAME)/SDK \
 		 $(NAME)/docs $(NAME)/Calib $(NAME)/contrib $(NAME)/scons \
-		 $(NAME)/SConstruct $(NAME)/*.py
+		 $(NAME)/SConstruct $(wildcard $(NAME)/*.py)
 
 install:	all
 ifndef ANALYZER
