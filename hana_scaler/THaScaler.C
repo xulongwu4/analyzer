@@ -412,7 +412,8 @@ Int_t THaScaler::LoadData(const THaEvData& evdata) {
   if (evstr_type == 1) {  // data in the event stream (physics triggers)
     if (!evdata.IsPhysicsTrigger()) return 0;  
     nlen = evdata.GetRocLength(crate); 
-    if (nlen == 0) return 0;
+    //if (nlen == 0) return 0;
+    if (nlen < 32) return 0;
   } else {  // traditional scaler event type 140
     if (evdata.GetEvType() != 140) return 0;   
     nlen = evdata.GetEvLength();
