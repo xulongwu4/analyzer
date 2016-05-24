@@ -53,7 +53,7 @@ LIBS         :=
 GLIBS        :=
 
 INCLUDES     := $(addprefix -I, $(INCDIRS) )
-FPPDIR       := /work/halla/gmp12/longwu/gmp_analysis/gmp_tools/libraries-1.6/GmpFppnew
+FPPDIR       := /work/halla/gmp12/longwu/gmp_analysis/gmp_tools/libraries-1.6/GmpFpp
 INCLUDES     += -I$(FPPDIR)
 LIBS         += -L$(FPPDIR) -lGmpFpp
 
